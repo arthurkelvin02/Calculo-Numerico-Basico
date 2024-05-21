@@ -3,6 +3,10 @@ function [x, contador] = bisseccao(f, intervalo, erro)
     intervalo = sort(intervalo);
     a = intervalo(1);
     b = intervalo(2);
+    % há raizes em intervalo?
+    if f(a)*f(b) > 0
+        error("não é possível determinar se há raizes no intervalo dado!")
+    end
 
     contador = 1; % vai contar o n° de iterações
     while true
