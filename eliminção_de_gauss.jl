@@ -1,13 +1,18 @@
-function metgauss(A::Matrix, B::Vector)::Matrix
+function metgauss(A::Matrix, B::Matrix)::Matrix
     # recebe duas matrizes e retorna uma matriz triangular inferior
-    C = [A B];
-    C = convert(Matrix{Float64}, C); # matriz ampliada
+    try
+        global C = Rational.([ A B ]); # matriz ampliada
+    catch
+        global C = [A B];
+    end
+
     n = size(C, 1); # qnt de linhas da matriz C
     
+    # triangular 
     for j = 1:(n-1) # coluna
         pivo = C[j,j];
         if pivo == 0
-            error("Pivô nulo! \nElemento problemático: a(#d,#d)", j,j)
+            error("Pivô nulo! \nElemento problemático: A(",j,", ",j,")")
         end
         for i = (j+1):n # linha
             k = C[i,j]/pivo;
@@ -23,7 +28,7 @@ end
 function solvematrix(a::Matrix)::Matrix
     # entre com uma matriz a triangular inferior e receba uma matriz solução R
     n = size(a,1); # n° de linhas de a
-    R = zeros(n, 1); # gerar matriz nula como 1° iteração de R
+    R = Rational.(zeros(n, 1)); # gerar matriz nula como 1° iteração de R
     k = 0;
     while k < n # para percorrer as linhas
         c = 0;
